@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CYBR Training Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="logo">CYBR</span><small>Training Library</small><span class="proto">Prototype · sample data</span></div>
+    <div class="who"><label for="role">Signed in as</label>
+      <select id="role"><option value="admin">Administrator</option><option value="trainer">Trainer</option></select></div>
+  </header>
+  <div class="shell">
+    <nav class="nav" id="nav" aria-label="Main"></nav>
+    <main class="main" id="main"></main>
+  </div>
+</div>
+<div id="modal"></div>
+<div id="toast" aria-live="polite"></div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
