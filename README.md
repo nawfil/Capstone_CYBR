@@ -10,6 +10,7 @@ search and filter them, and get a ranked shortlist for an upcoming session.
 Open `index.html` in a browser. No build step or install.
 
 ## Screens
+- Login page
 - Training Materials: tag filters, search, cards, pagination, add/edit material
 - Find for a Session: ranked shortlist from session details
 - Tags & Categories: add, rename and remove categories and tags (administrator only)
@@ -19,4 +20,4 @@ Open `index.html` in a browser. No build step or install.
 The "Signed in as" dropdown stands in for login (Administrator or Trainer).
 
 ## Not included yet
-Authentication, a shared database, live Google Drive integration.
+a shared database, live Google Drive integration.
