@@ -8,15 +8,17 @@ create table if not exists public.user_roles (
 
 create table if not exists public.categories (
   id         text primary key,
-  name       text not null,
-  multi      boolean not null default true,
-  sort_order int not null default 0
+  name        text not null,
+  multi       boolean not null default true,
+  description text not null default '',   -- shown under "What does this mean?"
+  sort_order  int not null default 0
 );
 
 create table if not exists public.tags (
   id          uuid primary key default gen_random_uuid(),
   category_id text not null references public.categories(id) on delete cascade on update cascade,
   name        text not null,
+  hint        text not null default '',   -- one-line meaning of the tag
   sort_order  int not null default 0,
   unique (category_id, name)
 );
@@ -25,7 +27,8 @@ create table if not exists public.materials (
   id          uuid primary key default gen_random_uuid(),
   title       text not null,
   description text not null default '',
-  link        text not null default '',
+  link        text not null default '',    -- empty until the Google Drive link is added
+  is_sample   boolean not null default false, -- made-up material kept for demonstration, shown with a "Sample" label
   created_by  uuid references auth.users(id) on delete set null,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()

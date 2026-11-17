@@ -895,7 +895,7 @@
 
     .covrow {
       display: grid;
-      grid-template-columns: minmax(0, 120px) 1fr 26px;
+      grid-template-columns: minmax(0, 175px) 1fr 26px;
       gap: 8px;
       align-items: center;
       font-size: 13px;
@@ -1132,6 +1132,20 @@
     #auth-screen[hidden] {
       display: none !important
     }
+  
+    /* explanations, sample label and missing-link text (client-approved changes) */
+    .chip.sample{border-style:dashed;color:var(--muted);background:none}
+    .nolink{color:var(--muted);font-size:13px}
+    .hint{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
+    .hint summary{cursor:pointer;color:var(--accent-strong);font-weight:500;width:max-content;max-width:100%}
+    .hint p{margin:6px 0}
+    .hint dl{margin:6px 0 2px;display:grid;gap:4px}
+    .hint dt{font-weight:600;color:var(--fg)}
+    .hint dd{margin:0 0 2px}
+    .catdesc{display:block;color:var(--muted);font-size:12.5px;font-weight:400;margin-top:3px;max-width:42ch}
+    .tagrow .in{flex:1;min-width:0;width:auto}
+    .tagrow .in.hintin{flex:1.6}
+    textarea.in{resize:vertical;min-height:60px}
   </style>
 </head>
 
@@ -1152,8 +1166,7 @@
   </section>
   <div class="wrap" id="app-shell" hidden>
     <header class="top">
-      <div class="brand"><span class="logo">CYBR</span><small>Training Library</small><span class="proto">Prototype ·
-          sample data</span></div>
+      <div class="brand"><span class="logo">CYBR</span><small>Training Library</small><span class="proto">Prototype</span></div>
       <div class="who"><span id="signed-in-user"></span><button type="button" class="btn sm" id="logout-button">Log
           out</button></div>
     </header>
@@ -1276,54 +1289,7 @@
       function ic(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + P[n] + '"/></svg>' }
       function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] }) }
 
-      /* ---------- seed data (from the CYBR taxonomy and wireframes) ---------- */
-      function seedCats() {
-        return [
-          { id: 'topic', name: 'Topic', multi: true, tags: ['Phishing', 'Ransomware', 'Passwords', 'MFA', 'Privacy', 'Data breaches', 'AI', 'Scams', 'Incident response', 'Social engineering'] },
-          { id: 'industry', name: 'Industry', multi: true, tags: ['Healthcare', 'Professional services', 'Retail', 'Real estate', 'Education', 'Not-for-profit', 'Small business'] },
-          { id: 'audience', name: 'Audience', multi: true, tags: ['Business owners', 'Employees', 'Managers', 'Students', 'Technical staff', 'Non-technical staff'] },
-          { id: 'delivery', name: 'Delivery Mode', multi: true, tags: ['In person', 'Online', 'Hybrid'] },
-          { id: 'length', name: 'Session Length', multi: false, tags: ['30 mins', '60 mins', '90 mins', '2 hours', 'Half day'] },
-          { id: 'group', name: 'Group Size', multi: false, tags: ['Small (<10)', 'Medium (10-20)', 'Large (>20)'] },
-          { id: 'level', name: 'Knowledge Level', multi: false, tags: ['Beginner', 'Intermediate', 'Advanced'] },
-          { id: 'maturity', name: 'Cyber Maturity', multi: false, tags: ['Low', 'Developing', 'Established'] },
-          { id: 'rtype', name: 'Resource Type', multi: true, tags: ['Presentation', 'Exercise', 'Worksheet', 'Case study', 'Discussion question', 'Facilitator notes'] },
-          { id: 'equip', name: 'Equipment', multi: true, tags: ['Projector', 'Internet access', 'Participant devices', 'Breakout space', 'No equipment required'] },
-          { id: 'juris', name: 'Jurisdiction', multi: true, tags: ['SA', 'Australia', 'International'] },
-          { id: 'recency', name: 'Recency', multi: false, tags: ['Current', 'Needs review', 'Archived'] }
-        ];
-      }
-      var S = 'Small (<10)', M = 'Medium (10-20)', L = 'Large (>20)';
-      function seedItems() {
-        var n = 0;
-        function m(title, desc, t, i, a, d, len, g, lv, mat, rt, eq, j, rc) {
-          n++;
-          return {
-            id: 'm' + n, title: title, desc: desc, link: 'sample:' + n,
-            tags: { topic: t, industry: i, audience: a, delivery: d, length: [len], group: [g], level: [lv], maturity: [mat], rtype: rt, equip: eq, juris: j, recency: [rc] }
-          };
-        }
-        return [
-          m('Spot the Phish: Healthcare Staff Workshop', 'Slides and a live inbox exercise using realistic clinic emails. Facilitator guide included.', ['Phishing'], ['Healthcare'], ['Employees', 'Non-technical staff'], ['In person'], '60 mins', L, 'Beginner', 'Low', ['Presentation', 'Exercise'], ['Projector', 'Participant devices'], ['SA', 'Australia'], 'Current'),
-          m('Phishing Inbox Simulation Worksheet', 'Printable worksheet where small groups mark up suspicious emails.', ['Phishing', 'Scams'], ['Professional services', 'Small business'], ['Employees'], ['In person', 'Hybrid'], '30 mins', S, 'Beginner', 'Developing', ['Worksheet'], ['No equipment required'], ['Australia'], 'Current'),
-          m('Ransomware Tabletop for Managers', 'Scenario-based tabletop exercise that walks managers through the first 24 hours of an attack.', ['Ransomware', 'Incident response'], ['Professional services', 'Real estate'], ['Managers'], ['In person'], 'Half day', M, 'Intermediate', 'Developing', ['Exercise', 'Facilitator notes'], ['Breakout space', 'Projector'], ['SA', 'Australia'], 'Current'),
-          m('Password and MFA Basics (Online)', 'Short online session on password managers and turning on MFA.', ['Passwords', 'MFA'], ['Retail', 'Small business'], ['Employees', 'Non-technical staff'], ['Online'], '30 mins', L, 'Beginner', 'Low', ['Presentation'], ['Internet access'], ['Australia'], 'Current'),
-          m('Board Briefing: Cyber Risk in Plain English', 'Executive briefing deck with discussion questions on breach duties and privacy.', ['Data breaches', 'Privacy'], ['Not-for-profit', 'Professional services'], ['Business owners', 'Managers'], ['In person', 'Hybrid'], '60 mins', S, 'Intermediate', 'Established', ['Presentation', 'Discussion question'], ['Projector'], ['Australia'], 'Needs review'),
-          m('Scam Awareness Community Session', 'Plain-language talk on common scams with group discussion prompts.', ['Scams', 'Phishing'], ['Not-for-profit'], ['Non-technical staff'], ['In person'], '90 mins', M, 'Beginner', 'Low', ['Presentation', 'Discussion question'], ['Projector'], ['SA'], 'Current'),
-          m('AI Tools and Data Privacy at Work', 'What staff should and should not paste into AI tools, with two short case studies.', ['AI', 'Privacy'], ['Education', 'Professional services'], ['Employees', 'Managers'], ['Hybrid', 'Online'], '60 mins', M, 'Intermediate', 'Developing', ['Presentation', 'Case study'], ['Projector', 'Internet access'], ['Australia', 'International'], 'Current'),
-          m('Data Breach Case Study: Clinic Records', 'Detailed case study of a clinic breach, aimed at people who manage systems and data.', ['Data breaches', 'Privacy'], ['Healthcare'], ['Managers', 'Technical staff'], ['In person'], '2 hours', S, 'Advanced', 'Established', ['Case study'], ['Projector', 'Breakout space'], ['Australia'], 'Current'),
-          m('Social Engineering Role-Play Cards', 'Role-play cards for phone and in-person pretexting scenarios.', ['Social engineering', 'Scams'], ['Retail', 'Real estate'], ['Employees'], ['In person'], '60 mins', M, 'Beginner', 'Developing', ['Exercise'], ['Breakout space'], ['Australia'], 'Current'),
-          m('Student Online Safety Starter', 'Short assembly-style talk on privacy, scams and passwords.', ['Privacy', 'Scams', 'Passwords'], ['Education'], ['Students'], ['In person', 'Online'], '30 mins', L, 'Beginner', 'Low', ['Presentation'], ['Projector'], ['SA', 'Australia'], 'Current'),
-          m('Incident Response Runbook Walkthrough', 'Hands-on walkthrough of a runbook for technical responders.', ['Incident response'], ['Professional services'], ['Technical staff'], ['Hybrid'], 'Half day', S, 'Advanced', 'Established', ['Exercise', 'Facilitator notes'], ['Participant devices', 'Internet access'], ['International'], 'Needs review'),
-          m('Real Estate Wire Fraud Awareness', 'Case studies of payment redirection fraud in property settlements.', ['Phishing', 'Scams'], ['Real estate'], ['Employees', 'Business owners'], ['In person', 'Online'], '60 mins', M, 'Intermediate', 'Developing', ['Presentation', 'Case study'], ['Projector'], ['Australia'], 'Current'),
-          m('MFA Rollout Facilitator Pack', 'Everything a facilitator needs to help a small business switch on MFA.', ['MFA', 'Passwords'], ['Small business'], ['Business owners', 'Managers'], ['Hybrid'], '90 mins', S, 'Beginner', 'Low', ['Facilitator notes', 'Presentation'], ['Projector'], ['Australia'], 'Current'),
-          m('Phishing Basics 2021 Deck', 'Original phishing deck. Replaced by newer healthcare and retail material.', ['Phishing'], ['Retail'], ['Employees'], ['In person'], '60 mins', L, 'Beginner', 'Low', ['Presentation'], ['Projector'], ['Australia'], 'Archived'),
-          m('Healthcare Privacy Discussion Prompts', 'Discussion prompts on patient privacy for a lunchtime session. No equipment needed.', ['Privacy'], ['Healthcare'], ['Employees', 'Managers'], ['In person', 'Hybrid'], '30 mins', M, 'Intermediate', 'Established', ['Discussion question'], ['No equipment required'], ['SA', 'Australia'], 'Current'),
-          m('Executive Ransomware Decision Game', 'Timed decision game where executives choose whether to pay, report or restore.', ['Ransomware'], ['Professional services', 'Healthcare'], ['Managers', 'Business owners'], ['In person'], '2 hours', S, 'Advanced', 'Established', ['Exercise', 'Case study'], ['Projector', 'Breakout space'], ['Australia'], 'Current'),
-          m('Small Business Cyber Essentials', 'Core session for owner-operators covering passwords, MFA, phishing and ransomware.', ['Passwords', 'MFA', 'Phishing', 'Ransomware'], ['Small business'], ['Business owners'], ['Online'], '60 mins', S, 'Beginner', 'Low', ['Presentation', 'Worksheet'], ['Internet access'], ['Australia'], 'Current'),
-          m('Healthcare Phishing Quiz Cards', 'Quick quiz cards for a ward or front-desk huddle.', ['Phishing'], ['Healthcare'], ['Non-technical staff'], ['In person'], '30 mins', L, 'Beginner', 'Low', ['Exercise'], ['No equipment required'], ['SA'], 'Current')
-        ];
-      }
+      var L = 'Large (>20)'; // default group size for the shortlist form
 
       /* ---------- state ---------- */
       var st = {
@@ -1349,22 +1315,22 @@
       async function loadData() {
         var db = cybrAuth;
         var r = await Promise.all([
-          db.from('categories').select('id,name,multi,sort_order').order('sort_order'),
-          db.from('tags').select('id,category_id,name,sort_order').order('sort_order'),
-          db.from('materials').select('id,title,description,link,created_at,material_tags(tag_id)').order('created_at', { ascending: false })
+          db.from('categories').select('id,name,multi,description,sort_order').order('sort_order'),
+          db.from('tags').select('id,category_id,name,hint,sort_order').order('sort_order'),
+          db.from('materials').select('id,title,description,link,is_sample,created_at,material_tags(tag_id)').order('created_at', { ascending: false })
         ]);
         for (var i = 0; i < r.length; i++) if (r[i].error) throw r[i].error;
-        var cats = r[0].data.map(function (c) { return { id: c.id, name: c.name, multi: c.multi, tags: [] } });
+        var cats = r[0].data.map(function (c) { return { id: c.id, name: c.name, multi: c.multi, desc: c.description || '', hints: {}, tags: [] } });
         var byId = {}; cats.forEach(function (c) { byId[c.id] = c });
         var tagIds = {}, tagById = {};
         r[1].data.forEach(function (t) {
           var c = byId[t.category_id]; if (!c) return;
-          c.tags.push(t.name); tagIds[c.id + '|' + t.name] = t.id; tagById[t.id] = { c: c.id, n: t.name };
+          c.tags.push(t.name); if (t.hint) c.hints[t.name] = t.hint; tagIds[c.id + '|' + t.name] = t.id; tagById[t.id] = { c: c.id, n: t.name };
         });
         var items = r[2].data.map(function (m) {
           var tags = {}; cats.forEach(function (c) { tags[c.id] = [] });
           m.material_tags.forEach(function (mt) { var t = tagById[mt.tag_id]; if (t) tags[t.c].push(t.n) });
-          return { id: m.id, title: m.title, desc: m.description || '', link: m.link || '', tags: tags };
+          return { id: m.id, title: m.title, desc: m.description || '', link: m.link || '', sample: !!m.is_sample, tags: tags };
         });
         st.cats = cats; st.items = items; st.tagIds = tagIds;
       }
@@ -1406,24 +1372,24 @@
         if (r.data && !r.data.length) throw new Error('You do not have permission to ' + what + '.');
         return r.data;
       }
-      async function dbCreateCategory(c, names) {
-        chk(await cybrAuth.from('categories').insert({ id: c.id, name: c.name, multi: c.multi, sort_order: st.cats.length }).select('id'), 'add categories');
-        chk(await cybrAuth.from('tags').insert(names.map(function (n, i) { return { category_id: c.id, name: n, sort_order: i } })).select('id'), 'add tags');
+      async function dbCreateCategory(c, rows) {
+        chk(await cybrAuth.from('categories').insert({ id: c.id, name: c.name, multi: c.multi, description: c.desc || '', sort_order: st.cats.length }).select('id'), 'add categories');
+        chk(await cybrAuth.from('tags').insert(rows.map(function (r, i) { return { category_id: c.id, name: r.name, hint: r.hint || '', sort_order: i } })).select('id'), 'add tags');
       }
-      // rows: [{orig, name}] in the order they should appear. orig is '' for a new tag.
-      async function dbUpdateCategory(c, name, multi, rows) {
+      // rows: [{orig, name, hint}] in the order they should appear. orig is '' for a new tag.
+      async function dbUpdateCategory(c, name, multi, rows, desc) {
         var cid = c.id, db = cybrAuth;
-        chk(await db.from('categories').update({ name: name, multi: multi }).eq('id', cid).select('id'), 'edit categories');
+        chk(await db.from('categories').update({ name: name, multi: multi, description: desc || '' }).eq('id', cid).select('id'), 'edit categories');
         var keep = {}; rows.forEach(function (r) { if (r.orig) keep[r.orig] = 1 });
         var removed = c.tags.filter(function (t) { return !keep[t] }).map(function (t) { return st.tagIds[cid + '|' + t] });
         if (removed.length) { var d = await db.from('tags').delete().in('id', removed); if (d.error) throw d.error }
-        var existing = rows.filter(function (r) { return r.orig }).map(function (r, i) { return { id: st.tagIds[cid + '|' + r.orig], category_id: cid, name: r.name, sort_order: rows.indexOf(r), renamed: r.orig !== r.name } });
+        var existing = rows.filter(function (r) { return r.orig }).map(function (r, i) { return { id: st.tagIds[cid + '|' + r.orig], category_id: cid, name: r.name, hint: r.hint || '', sort_order: rows.indexOf(r), renamed: r.orig !== r.name } });
         var renamed = existing.filter(function (x) { return x.renamed });
         if (renamed.length > 1) { // two-step rename so swaps and chains (A to B, B to C) never clash on the unique name
-          var tmp = await db.from('tags').upsert(renamed.map(function (x) { return { id: x.id, category_id: cid, name: '~' + x.id, sort_order: x.sort_order } })); if (tmp.error) throw tmp.error;
+          var tmp = await db.from('tags').upsert(renamed.map(function (x) { return { id: x.id, category_id: cid, name: '~' + x.id, hint: x.hint, sort_order: x.sort_order } })); if (tmp.error) throw tmp.error;
         }
-        if (existing.length) { var u = await db.from('tags').upsert(existing.map(function (x) { return { id: x.id, category_id: cid, name: x.name, sort_order: x.sort_order } })); if (u.error) throw u.error }
-        var fresh = rows.filter(function (r) { return !r.orig }).map(function (r) { return { category_id: cid, name: r.name, sort_order: rows.indexOf(r) } });
+        if (existing.length) { var u = await db.from('tags').upsert(existing.map(function (x) { return { id: x.id, category_id: cid, name: x.name, hint: x.hint, sort_order: x.sort_order } })); if (u.error) throw u.error }
+        var fresh = rows.filter(function (r) { return !r.orig }).map(function (r) { return { category_id: cid, name: r.name, hint: r.hint || '', sort_order: rows.indexOf(r) } });
         if (fresh.length) chk(await db.from('tags').insert(fresh).select('id'), 'add tags');
         if (!multi) { // switching to single choice: keep only the first tag on each material
           for (var i = 0; i < st.items.length; i++) {
@@ -1448,6 +1414,26 @@
       // (The database also refuses these writes for trainers: see supabase/02_rls.sql.)
       var ADMIN_ACTS = ['addmat', 'editmat', 'delmat', 'addcat', 'editcat', 'askdel', 'delcat', 'addrow', 'rmrow'];
       function isAdmin() { return authenticatedRole === 'admin'; }
+      function hasLink(it) { return /^https?:\/\//i.test(it.link || '') }
+      function hintOf(c, t) { return (c.hints && c.hints[t]) || '' }
+      // "What does this mean?" panel under a category: its description plus a line for each tag that has one.
+      function helpHtml(c) {
+        var hs = c.tags.filter(function (t) { return hintOf(c, t) });
+        if (!c.desc && !hs.length) return '';
+        var h = '<details class="hint"><summary>What does this mean?</summary>';
+        if (c.desc) h += '<p>' + esc(c.desc) + '</p>';
+        if (hs.length) h += '<dl>' + hs.map(function (t) { return '<div><dt>' + esc(t) + '</dt><dd>' + esc(hintOf(c, t)) + '</dd></div>' }).join('') + '</dl>';
+        return h + '</details>';
+      }
+      function linkHtml(it) {
+        return hasLink(it) ? '<a href="' + esc(it.link) + '" target="_blank" rel="noopener">Open in Drive ' + ic('ext') + '</a>' : '<span class="nolink">No Drive link yet</span>';
+      }
+      // The Threat Report Data category lists editions newest first. A material is flagged when it only quotes older editions.
+      function latestThreat() { var c = cat('threat'); return c && c.tags.length ? c.tags[0] : null }
+      function citesOlderReport(it) {
+        var lt = latestThreat(), th = it.tags.threat || [];
+        return !!lt && th.length > 0 && th.indexOf(lt) < 0;
+      }
       function toast(msg) {
         var t = document.getElementById('toast'); t.innerHTML = '<div class="toast">' + esc(msg) + '</div>';
         clearTimeout(toast.t); toast.t = setTimeout(function () { t.innerHTML = '' }, 2600);
@@ -1488,11 +1474,12 @@
         var rc = (it.tags.recency || [])[0];
         var shown = chips.slice(0, 6), more = chips.length - shown.length;
         var h = '<article class="card"><h3>' + esc(it.title) + '</h3><p>' + esc(it.desc) + '</p><div class="chips">';
+        if (it.sample) h += '<span class="chip sample">Sample</span>';
         if (rc === 'Needs review') h += '<span class="chip warn">Needs review</span>';
         if (rc === 'Archived') h += '<span class="chip muted">Archived</span>';
         h += shown.map(function (t) { return '<span class="chip">' + esc(t) + '</span>' }).join('');
         if (more > 0) h += '<span class="chip more">+' + more + '</span>';
-        h += '</div><div class="foot"><a href="' + (it.link.indexOf('sample:') === 0 ? '#' : esc(it.link)) + '" ' + (it.link.indexOf('sample:') === 0 ? 'data-act="sample"' : 'target="_blank" rel="noopener"') + '>Open in Drive ' + ic('ext') + '</a>';
+        h += '</div><div class="foot">' + linkHtml(it);
         if (isAdmin()) h += '<button class="btn sm" data-act="editmat" data-id="' + it.id + '">' + ic('edit') + 'Edit</button>';
         return h + '</div></article>';
       }
@@ -1507,10 +1494,10 @@
         if (isAdmin()) h += '<button class="btn primary" data-act="addmat">' + ic('plus') + 'Add material</button>';
         h += '</div><div class="lib"><details class="panel filters" id="fdet" open><summary><h2>Filters</h2><span class="tog btn sm">Show / hide</span></summary><div class="fbody">';
         st.cats.forEach(function (c) {
-          h += '<div class="fgroup"><h3>' + esc(c.name) + '</h3><div class="opts">';
+          h += '<div class="fgroup"><h3>' + esc(c.name) + '</h3>' + helpHtml(c) + '<div class="opts">';
           c.tags.forEach(function (t) {
-            var on = (st.filters[c.id] || []).indexOf(t) > -1;
-            h += '<button class="opt" aria-pressed="' + on + '" data-act="ftoggle" data-c="' + c.id + '" data-t="' + esc(t) + '"><span>' + esc(t) + '</span><i>' + tagCount(c.id, t) + '</i></button>';
+            var on = (st.filters[c.id] || []).indexOf(t) > -1, hn = hintOf(c, t);
+            h += '<button class="opt"' + (hn ? ' title="' + esc(hn) + '"' : '') + ' aria-pressed="' + on + '" data-act="ftoggle" data-c="' + c.id + '" data-t="' + esc(t) + '"><span>' + esc(t) + '</span><i>' + tagCount(c.id, t) + '</i></button>';
           });
           h += '</div></div>';
         });
@@ -1531,7 +1518,7 @@
       }
 
       /* recommender */
-      var NO_REC = { rtype: 1, recency: 1 };
+      var NO_REC = { rtype: 1, recency: 1, threat: 1 };
       var WT = { topic: 3, audience: 2, industry: 2, level: 2, length: 2, delivery: 2, group: 1, maturity: 1, equip: 1, juris: .5 };
       var ORD = { length: 1, group: 1, level: 1, maturity: 1 };
       function scoreItem(it) {
@@ -1567,8 +1554,8 @@
           if (NO_REC[c.id]) return;
           var want = st.rec[c.id] || [];
           var lab = c.id === 'equip' ? 'Equipment available' : c.name;
-          h += '<div class="fgroup"><h3>' + esc(lab) + ' <span>' + (c.multi ? 'choose any' : 'choose one') + '</span></h3><div class="pillrow">';
-          c.tags.forEach(function (t) { h += '<button class="pill" aria-pressed="' + (want.indexOf(t) > -1) + '" data-act="rtoggle" data-c="' + c.id + '" data-t="' + esc(t) + '">' + esc(t) + '</button>' });
+          h += '<div class="fgroup"><h3>' + esc(lab) + ' <span>' + (c.multi ? 'choose any' : 'choose one') + '</span></h3>' + helpHtml(c) + '<div class="pillrow">';
+          c.tags.forEach(function (t) { var hn = hintOf(c, t); h += '<button class="pill"' + (hn ? ' title="' + esc(hn) + '"' : '') + ' aria-pressed="' + (want.indexOf(t) > -1) + '" data-act="rtoggle" data-c="' + c.id + '" data-t="' + esc(t) + '">' + esc(t) + '</button>' });
           h += '</div></div>';
         });
         h += '<div class="fgroup sel"><input type="checkbox" id="rarch"' + (st.recArchived ? ' checked' : '') + '><label for="rarch">Include archived materials</label></div>';
@@ -1583,9 +1570,9 @@
             var pct = Math.round(r.score * 100);
             var tier = pct >= 80 ? 'Strong match' : pct >= 55 ? 'Partial match' : 'Weak match';
             var rc = (r.it.tags.recency || [])[0];
-            h += '<article class="panel result"><header><div><h3>' + esc(r.it.title) + '</h3><span class="tagline">' + tier + (rc === 'Needs review' ? ' · tagged "Needs review"' : rc === 'Archived' ? ' · archived' : '') + '</span></div><span class="score">' + pct + '%</span></header>';
+            h += '<article class="panel result"><header><div><h3>' + esc(r.it.title) + '</h3><span class="tagline">' + tier + (r.it.sample ? ' · sample' : '') + (rc === 'Needs review' ? ' · tagged "Needs review"' : rc === 'Archived' ? ' · archived' : '') + '</span></div><span class="score">' + pct + '%</span></header>';
             h += '<div class="bar" role="img" aria-label="' + pct + ' percent match"><i style="width:' + pct + '%"></i></div><div class="why">' + r.why.map(function (w) { return '<span class="chip ' + w.k + '">' + esc(w.l) + '</span>' }).join('') + '</div>';
-            h += '<div class="foot"><a href="' + (r.it.link.indexOf('sample:') === 0 ? '#' : esc(r.it.link)) + '" ' + (r.it.link.indexOf('sample:') === 0 ? 'data-act="sample"' : 'target="_blank" rel="noopener"') + '>Open in Drive ' + ic('ext') + '</a></div></article>';
+            h += '<div class="foot">' + linkHtml(r.it) + '</div></article>';
           });
         }
         return h + '</section></div>';
@@ -1600,7 +1587,7 @@
         h += '<div class="tablewrap"><table><thead><tr><th>Category</th><th>Tags</th><th>Selection</th>' + (isAdmin() ? '<th>Actions</th>' : '') + '</tr></thead><tbody>';
         st.cats.forEach(function (c) {
           var ex = c.tags.slice(0, 4).join(', ') + (c.tags.length > 4 ? ' … (' + c.tags.length + ')' : '');
-          h += '<tr><td><b>' + esc(c.name) + '</b></td><td class="tagline">' + esc(ex) + '</td><td class="kind">' + (c.multi ? 'Multi' : 'Single') + '</td>';
+          h += '<tr><td><b>' + esc(c.name) + '</b>' + (c.desc ? '<span class="catdesc">' + esc(c.desc) + '</span>' : '') + '</td><td class="tagline">' + esc(ex) + '</td><td class="kind">' + (c.multi ? 'Multi' : 'Single') + '</td>';
           if (isAdmin()) {
             if (st.confirmDel === c.id) h += '<td class="act">Delete and untag? <button class="btn danger sm" data-act="delcat" data-id="' + c.id + '">Delete</button> <button class="btn sm" data-act="cancelcat">Cancel</button></td>';
             else h += '<td class="act"><button class="iconbtn" data-act="editcat" data-id="' + c.id + '" aria-label="Edit ' + esc(c.name) + '">' + ic('edit') + '</button><button class="iconbtn" data-act="askdel" data-id="' + c.id + '" aria-label="Delete ' + esc(c.name) + '">' + ic('trash') + '</button></td>';
@@ -1618,9 +1605,11 @@
         h += '<div class="panel stat"><b>' + st.items.length + '</b><span>Materials registered</span></div>';
         h += '<div class="panel stat"><b>' + cur + '</b><span>Current</span></div>';
         h += '<div class="panel stat flag"><b>' + rev.length + '</b><span>Needs review</span></div>';
-        h += '<div class="panel stat"><b>' + arch + '</b><span>Archived</span></div></div>';
-        h += '<h2 style="font-size:18px;margin-bottom:10px">Coverage by tag</h2><div class="cov">';
-        ['topic', 'industry', 'audience'].forEach(function (id) {
+        var old = st.items.filter(citesOlderReport);
+        h += '<div class="panel stat"><b>' + arch + '</b><span>Archived</span></div>';
+        if (latestThreat()) h += '<div class="panel stat' + (old.length ? ' flag' : '') + '"><b>' + old.length + '</b><span>Quote an older threat report</span></div>';
+        h += '</div><h2 style="font-size:18px;margin-bottom:10px">Coverage by tag</h2><div class="cov">';
+        ['topic', 'industry', 'audience', 'threat'].forEach(function (id) {
           var c = cat(id); if (!c) return;
           var counts = c.tags.map(function (t) { return [t, tagCount(id, t)] });
           var mx = Math.max.apply(null, counts.map(function (x) { return x[1] }).concat([1]));
@@ -1631,14 +1620,21 @@
         h += '</div><h2 style="font-size:18px;margin-bottom:10px">Needs review</h2><div class="panel">';
         if (!rev.length) h += '<div class="listrow">Nothing is waiting for review.</div>';
         rev.forEach(function (it) { h += '<div class="listrow"><span>' + esc(it.title) + '</span>' + (isAdmin() ? '<button class="btn sm" data-act="editmat" data-id="' + it.id + '">' + ic('edit') + 'Edit</button>' : '') + '</div>' });
-        return h + '</div>';
+        h += '</div>';
+        if (old.length) {
+          h += '<h2 style="font-size:18px;margin:18px 0 4px">Quotes an older threat report</h2><p class="tagline" style="margin:0 0 10px">These materials use figures from an earlier edition than ' + esc(latestThreat()) + '. Check whether the figures need updating.</p><div class="panel">';
+          old.forEach(function (it) { h += '<div class="listrow"><span>' + esc(it.title) + ' <span class="tagline">· ' + esc((it.tags.threat || []).join(', ')) + '</span></span>' + (isAdmin() ? '<button class="btn sm" data-act="editmat" data-id="' + it.id + '">' + ic('edit') + 'Edit</button>' : '') + '</div>' });
+          h += '</div>';
+        }
+        return h;
       }
 
       function viewSettings() {
         return '<div class="pagehead"><div><h1>Settings</h1><p>Prototype controls for evaluation.</p></div></div>' +
           '<div class="panel" style="padding:18px;display:grid;gap:14px;max-width:640px">' +
-          '<div><h3 style="font-size:16px">Access control</h3><p class="tagline" style="margin:4px 0 0">Supabase sign-in is enabled for this prototype. Administrator/Trainer roles are loaded from Supabase. Material editing permissions are currently enforced only in the interface; server-side permissions still need to be implemented.</p></div>' +
-          '<div><h3 style="font-size:16px">Storage</h3><p class="tagline" style="margin:4px 0 0">Categories, tags and materials are stored in Supabase and shared by all staff. The sample materials use placeholder Drive links. In the real system each material would link to its file in CYBR\'s Google Drive.</p></div></div>';
+          '<div><h3 style="font-size:16px">Access control</h3><p class="tagline" style="margin:4px 0 0">Staff sign in with Supabase. Trainers can search, filter and get shortlists. Administrators can also add, edit and delete materials, tags and categories. The role comes from the user&#39;s account, and the database itself refuses changes from trainers.</p></div>' +
+          '<div><h3 style="font-size:16px">Library contents</h3><p class="tagline" style="margin:4px 0 0">The library starts with five of CYBR\'s own materials, tagged by the team, followed by made-up materials marked Sample so the filters and shortlist have enough to show. Delete the samples once more real materials are added.</p></div>' +
+          '<div><h3 style="font-size:16px">Storage</h3><p class="tagline" style="margin:4px 0 0">Categories, tags and materials are stored in Supabase and shared by all staff. Materials show "No Drive link yet" until an administrator adds the link to the file in CYBR\'s Google Drive.</p></div></div>';
       }
 
       /* ---------- render ---------- */
@@ -1664,16 +1660,16 @@
         st.modal = { type: 'mat', id: id };
         var h = '<h2>' + (it ? 'Edit training material' : 'Add training material') + '</h2><form id="matform" novalidate>';
         h += '<div class="field"><label for="f_title">Title</label><input class="in" id="f_title" value="' + esc(it ? it.title : '') + '"></div>';
-        h += '<div class="field"><label for="f_link">Google Drive link <small>(the file stays in Drive)</small></label><input class="in" id="f_link" placeholder="https://drive.google.com/…" value="' + esc(it && it.link.indexOf('sample:') !== 0 ? it.link : '') + '"></div>';
+        h += '<div class="field"><label for="f_link">Google Drive link <small>(the file stays in Drive)</small></label><input class="in" id="f_link" placeholder="https://drive.google.com/…" value="' + esc(it && hasLink(it) ? it.link : '') + '"></div>';
         h += '<div class="field"><label for="f_desc">Short description <small>(optional)</small></label><input class="in" id="f_desc" value="' + esc(it ? it.desc : '') + '"></div><div class="two">';
         st.cats.forEach(function (c) {
           var have = it ? (it.tags[c.id] || []) : [];
           if (c.multi) {
-            h += '<div class="field"><span class="lab">' + esc(c.name) + ' <small>(choose any)</small></span><div class="multi">';
-            c.tags.forEach(function (t) { h += '<button type="button" class="pill" aria-pressed="' + (have.indexOf(t) > -1) + '" data-act="mpill" data-c="' + c.id + '" data-t="' + esc(t) + '">' + esc(t) + '</button>' });
+            h += '<div class="field"><span class="lab">' + esc(c.name) + ' <small>(choose any)</small></span>' + helpHtml(c) + '<div class="multi">';
+            c.tags.forEach(function (t) { var hn = hintOf(c, t); h += '<button type="button" class="pill"' + (hn ? ' title="' + esc(hn) + '"' : '') + ' aria-pressed="' + (have.indexOf(t) > -1) + '" data-act="mpill" data-c="' + c.id + '" data-t="' + esc(t) + '">' + esc(t) + '</button>' });
             h += '</div></div>';
           } else {
-            h += '<div class="field"><label for="f_' + c.id + '">' + esc(c.name) + '</label><select class="in" id="f_' + c.id + '" data-single="' + c.id + '"><option value="">Not set</option>';
+            h += '<div class="field"><label for="f_' + c.id + '">' + esc(c.name) + '</label>' + helpHtml(c) + '<select class="in" id="f_' + c.id + '" data-single="' + c.id + '"><option value="">Not set</option>';
             c.tags.forEach(function (t) { h += '<option' + (have[0] === t ? ' selected' : '') + '>' + esc(t) + '</option>' });
             h += '</select></div>';
           }
@@ -1698,12 +1694,12 @@
           } else { var v = document.getElementById('f_' + c.id).value; tags[c.id] = v ? [v] : [] }
         });
         var desc = document.getElementById('f_desc').value.trim();
-        var fields = { title: title, desc: desc, link: link || (it ? it.link : '') || 'sample:new' };
+        var fields = { title: title, desc: desc, link: link || (it ? it.link : '') };
         var btn = document.querySelector('#matform button[type="submit"]');
         if (btn) { btn.disabled = true; btn.textContent = 'Saving…' }
         try {
           if (it) { await dbUpdateMaterial(it.id, fields, tagIdsOf(it.tags), tagIdsOf(tags)); it.title = fields.title; it.desc = fields.desc; it.link = fields.link; it.tags = tags }
-          else { var nid = await dbAddMaterial(fields, tagIdsOf(tags)); st.items.unshift({ id: nid, title: fields.title, desc: fields.desc, link: fields.link, tags: tags }) }
+          else { var nid = await dbAddMaterial(fields, tagIdsOf(tags)); st.items.unshift({ id: nid, title: fields.title, desc: fields.desc, link: fields.link, sample: false, tags: tags }) }
         } catch (e) {
           console.error('Save failed:', e);
           err.textContent = 'Could not save. ' + errMsg(e); err.hidden = false;
@@ -1725,16 +1721,17 @@
       function catModal(id) {
         var c = id ? cat(id) : null;
         st.modal = { type: 'cat', id: id };
-        catDraft = { name: c ? c.name : '', multi: c ? c.multi : true, rows: c ? c.tags.map(function (t) { return { orig: t, name: t } }) : [{ orig: '', name: '' }] };
+        catDraft = { name: c ? c.name : '', multi: c ? c.multi : true, desc: c && c.desc ? c.desc : '', rows: c ? c.tags.map(function (t) { return { orig: t, name: t, hint: hintOf(c, t) } }) : [{ orig: '', name: '', hint: '' }] };
         drawCatModal();
       }
       function drawCatModal(err) {
         var c = st.modal.id;
         var h = '<h2>' + (c ? 'Edit category' : 'Add category') + '</h2><form id="catform" novalidate><div class="two"><div class="field"><label for="c_name">Category name</label><input class="in" id="c_name" value="' + esc(catDraft.name) + '"></div>';
         h += '<div class="field"><label for="c_multi">Selection</label><select class="in" id="c_multi"><option value="1"' + (catDraft.multi ? ' selected' : '') + '>Multi: pick any number of tags</option><option value="0"' + (!catDraft.multi ? ' selected' : '') + '>Single: pick one tag</option></select></div></div>';
-        h += '<div class="field"><span class="lab">Tags</span>';
+        h += '<div class="field"><label for="c_desc">What this category means <small>(optional, shown under "What does this mean?")</small></label><textarea class="in" id="c_desc" rows="2">' + esc(catDraft.desc) + '</textarea></div>';
+        h += '<div class="field"><span class="lab">Tags <small>(meaning is optional)</small></span>';
         catDraft.rows.forEach(function (r, i) {
-          h += '<div class="tagrow"><input class="in" data-row="' + i + '" aria-label="Tag ' + (i + 1) + '" value="' + esc(r.name) + '"><button type="button" class="iconbtn" data-act="rmrow" data-i="' + i + '" aria-label="Remove tag">' + ic('trash') + '</button></div>';
+          h += '<div class="tagrow"><input class="in" data-row="' + i + '" aria-label="Tag ' + (i + 1) + '" value="' + esc(r.name) + '"><input class="in hintin" data-hint="' + i + '" aria-label="Meaning of tag ' + (i + 1) + '" placeholder="What it means" value="' + esc(r.hint || '') + '"><button type="button" class="iconbtn" data-act="rmrow" data-i="' + i + '" aria-label="Remove tag">' + ic('trash') + '</button></div>';
         });
         h += '<div><button type="button" class="btn sm" data-act="addrow">' + ic('plus') + 'Add tag</button></div></div>';
         if (c) h += '<p class="tagline">Renaming a tag updates every material that uses it. Removing a tag removes it from those materials.</p>';
@@ -1746,14 +1743,17 @@
       function readCatDraft() {
         var n = document.getElementById('c_name'); if (!n) return;
         catDraft.name = n.value; catDraft.multi = document.getElementById('c_multi').value === '1';
+        catDraft.desc = document.getElementById('c_desc').value;
         [].forEach.call(document.querySelectorAll('#modal [data-row]'), function (e) { catDraft.rows[+e.getAttribute('data-row')].name = e.value });
+        [].forEach.call(document.querySelectorAll('#modal [data-hint]'), function (e) { catDraft.rows[+e.getAttribute('data-hint')].hint = e.value });
       }
       async function saveCat() {
         if (!isAdmin()) return drawCatModal('Only administrators can change tags and categories.');
         readCatDraft();
         var name = catDraft.name.trim();
         if (!name) return drawCatModal('Enter a category name.');
-        var rows = catDraft.rows.map(function (r) { return { orig: r.orig, name: r.name.trim() } }).filter(function (r) { return r.name });
+        var rows = catDraft.rows.map(function (r) { return { orig: r.orig, name: r.name.trim(), hint: (r.hint || '').trim() } }).filter(function (r) { return r.name });
+        var desc = catDraft.desc.trim();
         var seen = {}, dup = false; rows.forEach(function (r) { var k = r.name.toLowerCase(); if (seen[k]) dup = true; seen[k] = 1 });
         if (dup) return drawCatModal('Two tags have the same name. Rename or remove one.');
         if (!rows.length) return drawCatModal('Add at least one tag.');
@@ -1764,10 +1764,10 @@
           if (!c) {
             var base = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'cat', nid = base, k = 1;
             while (cat(nid)) nid = base + '-' + (++k);
-            await dbCreateCategory({ id: nid, name: name, multi: catDraft.multi }, rows.map(function (r) { return r.name }));
+            await dbCreateCategory({ id: nid, name: name, multi: catDraft.multi, desc: desc }, rows);
           } else {
             var map = {}; rows.forEach(function (r) { if (r.orig) map[r.orig] = r.name });
-            await dbUpdateCategory(c, name, catDraft.multi, rows);
+            await dbUpdateCategory(c, name, catDraft.multi, rows, desc);
             if (st.filters[c.id]) st.filters[c.id] = st.filters[c.id].filter(function (t) { return map[t] !== undefined }).map(function (t) { return map[t] });
             if (st.rec[c.id]) st.rec[c.id] = st.rec[c.id].filter(function (t) { return map[t] !== undefined }).map(function (t) { return map[t] });
           }
@@ -1801,7 +1801,6 @@
         var c = el.getAttribute('data-c'), t = el.getAttribute('data-t'), id = el.getAttribute('data-id');
         if (act === 'scrim') { if (e.target === el) closeModal(); return }
         if (ADMIN_ACTS.indexOf(act) > -1 && !isAdmin()) { toast('Only administrators can do that.'); return }
-        if (act === 'sample') { e.preventDefault(); toast('Sample link. Real materials open their file in Google Drive.'); return }
         switch (act) {
           case 'view': st.view = el.getAttribute('data-v'); st.confirmDel = null; render(); window.scrollTo(0, 0); break;
           case 'ftoggle': toggleIn(st.filters, c, t, true); st.page = 1; render(); break;
@@ -1824,7 +1823,7 @@
           case 'cancelcat': st.confirmDel = null; render(); break;
           case 'delcat':
             delCat(id); break;
-          case 'addrow': readCatDraft(); catDraft.rows.push({ orig: '', name: '' }); drawCatModal(); var rs = document.querySelectorAll('#modal [data-row]'); rs[rs.length - 1].focus(); break;
+          case 'addrow': readCatDraft(); catDraft.rows.push({ orig: '', name: '', hint: '' }); drawCatModal(); var rs = document.querySelectorAll('#modal [data-row]'); rs[rs.length - 1].focus(); break;
           case 'rmrow': readCatDraft(); catDraft.rows.splice(+el.getAttribute('data-i'), 1); drawCatModal(); break;
         }
       });
