@@ -1460,7 +1460,7 @@
       function tagCount(cid, t) { return st.items.filter(function (it) { return (it.tags[cid] || []).indexOf(t) > -1 }).length }
 
       /* ---------- views ---------- */
-      var NAV = [['dashboard', 'Dashboard', 'home'], ['library', 'Training Materials', 'doc'], ['recommend', 'Find for a Session', 'spark'], ['tags', 'Tags & Categories', 'tag'], ['settings', 'Settings', 'gear']];
+      var NAV = [['dashboard', 'Dashboard', 'home'], ['library', 'Training Materials', 'doc'], ['recommend', 'Find for a Session', 'spark'], ['tags', 'Tags & Categories', 'tag'], ['settings', 'Settings', 'gear'], ['guide', 'User Guide', 'doc']];
       function renderNav() {
         document.getElementById('nav').innerHTML = NAV.map(function (n) {
           return '<button data-act="view" data-v="' + n[0] + '"' + (st.view === n[0] ? ' aria-current="page"' : '') + '>' + ic(n[2]) + n[1] + '</button>';
@@ -1802,7 +1802,7 @@
         if (act === 'scrim') { if (e.target === el) closeModal(); return }
         if (ADMIN_ACTS.indexOf(act) > -1 && !isAdmin()) { toast('Only administrators can do that.'); return }
         switch (act) {
-          case 'view': st.view = el.getAttribute('data-v'); st.confirmDel = null; render(); window.scrollTo(0, 0); break;
+          case 'view': if (el.getAttribute('data-v') === 'guide') { window.open('./CYBR-User-Guide.pdf', '_blank', 'noopener,noreferrer'); break; } st.view = el.getAttribute('data-v'); st.confirmDel = null; render(); window.scrollTo(0, 0); break;
           case 'ftoggle': toggleIn(st.filters, c, t, true); st.page = 1; render(); break;
           case 'clear': st.filters = {}; st.q = ''; st.page = 1; render(); break;
           case 'page': st.page = +el.getAttribute('data-p'); render(); window.scrollTo(0, 0); break;
